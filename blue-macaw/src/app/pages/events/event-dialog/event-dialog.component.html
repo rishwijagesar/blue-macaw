@@ -1,0 +1,48 @@
+<h2 mat-dialog-title>{{ data.isUpdate ? 'Update Event' : 'Add Event' }}</h2>
+<mat-dialog-content>
+  <mat-form-field appearance="fill">
+    <mat-label>Event Title</mat-label>
+    <input matInput [(ngModel)]="data.eventTitle">
+  </mat-form-field>
+  <mat-form-field appearance="fill">
+    <mat-label>Event Date</mat-label>
+    <input matInput [matDatepicker]="picker" [(ngModel)]="data.eventDate">
+    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker #picker></mat-datepicker>
+  </mat-form-field>
+  <mat-form-field appearance="fill">
+    <mat-label>Start Time</mat-label>
+    <input matInput type="time" [(ngModel)]="data.startTime">
+  </mat-form-field>
+  <mat-form-field appearance="fill">
+    <mat-label>End Time</mat-label>
+    <input matInput type="time" [(ngModel)]="data.endTime">
+  </mat-form-field>
+  <mat-form-field appearance="fill">
+    <mat-label>Category</mat-label>
+    <mat-select [(ngModel)]="data.category" (selectionChange)="onCategoryChange($event.value)">
+      <mat-option *ngFor="let category of categories" [value]="category">
+        {{ category.name }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+  <mat-form-field appearance="fill">
+    <mat-label>Repeat</mat-label>
+    <mat-select [(ngModel)]="data.repeat">
+      <mat-option *ngFor="let option of repeatOptions" [value]="option.value">
+        {{ option.name }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+  <mat-form-field appearance="fill" *ngIf="data.repeat !== 'none'">
+    <mat-label>End Date</mat-label>
+    <input matInput [matDatepicker]="endPicker" [(ngModel)]="data.endDate" [max]="maxEndDate">
+    <mat-datepicker-toggle matSuffix [for]="endPicker"></mat-datepicker-toggle>
+    <mat-datepicker #endPicker></mat-datepicker>
+  </mat-form-field>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-raised-button color="primary" (click)="onSave()">Save</button>
+  <button mat-raised-button color="warn" *ngIf="data.isUpdate" (click)="onDelete()">Delete</button>
+  <button mat-raised-button mat-dialog-close>Cancel</button>
+</mat-dialog-actions>

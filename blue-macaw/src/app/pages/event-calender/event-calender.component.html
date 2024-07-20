@@ -1,0 +1,11 @@
+<full-calendar [options]="calendarOptions"></full-calendar>
+
+<div class="calendar-legend">
+  <h3>Event Categories</h3>
+  <div class="legend-container">
+    <div class="legend-item" *ngFor="let category of categories">
+      <span class="legend-color" [style.background]="category.color"></span>
+      {{ category.name }}
+    </div>
+  </div>
+</div>
