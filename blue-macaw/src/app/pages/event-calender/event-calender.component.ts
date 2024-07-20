@@ -6,6 +6,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { EventDialogComponent } from '../events/event-dialog/event-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 import * as moment from 'moment';
+import { DeleteConfirmDialogComponent } from '../events/delete-confirm-dialog/delete-confirm-dialog.component';
 
 @Component({
   selector: 'app-event-calender',
@@ -23,20 +24,20 @@ export class EventCalenderComponent {
   ];
 
   calendarEvents: EventInput[] = [
-    { id: uuidv4(), title: 'Event 1', date: '2024-07-20', color: '#FFCDD2', start: '10:00', end: '11:00' },
-    { id: uuidv4(), title: 'Event 2', date: '2024-07-22', color: '#F8BBD0', start: '12:00' }
+    { id: uuidv4(), title: 'Event 1', date: '2024-07-20', color: '#FFCDD2', start: '10:00', end: '11:00', seriesId: 's1' },
+    { id: uuidv4(), title: 'Event 2', date: '2024-07-22', color: '#F8BBD0', start: '12:00', seriesId: 's2' }
   ];
 
   calendarOptions: CalendarOptions = {
     plugins: [dayGridPlugin, interactionPlugin],
     initialView: 'dayGridMonth',
+    firstDay: 1, // Set the first day of the week to Monday
     events: this.calendarEvents,
     editable: true,
     selectable: true,
     dateClick: this.handleDateClick.bind(this),
     eventClick: this.handleEventClick.bind(this),
     fixedWeekCount: false,
-    height: 'auto'
   };
 
   constructor(public dialog: MatDialog) {}
@@ -53,13 +54,14 @@ export class EventCalenderComponent {
       startTime: arg.event.startStr.split('T')[1] || '',
       endTime: arg.event.endStr ? arg.event.endStr.split('T')[1] : '',
       eventColor: arg.event.backgroundColor,
+      seriesId: arg.event.extendedProps.seriesId,
       isUpdate: true
     });
   }
 
   openDialog(data: any): void {
     const dialogRef = this.dialog.open(EventDialogComponent, {
-      width: '300px',
+      width: '500px', // Set the width of the dialog
       data: { ...data, isUpdate: data.isUpdate || false }
     });
 
@@ -71,19 +73,20 @@ export class EventCalenderComponent {
           this.addEvent(result.event);
         }
       } else if (result && result.action === 'delete') {
-        this.deleteEvent(result.event.eventId);
+        this.confirmDelete(result.event);
       }
     });
   }
 
   addEvent(event: any) {
-    const events = this.generateRepeatingEvents(event);
+    const seriesId = uuidv4();
+    const events = this.generateRepeatingEvents({ ...event, seriesId });
     this.calendarEvents = [...this.calendarEvents, ...events];
     this.calendarOptions.events = this.calendarEvents;
   }
 
   updateEvent(event: any) {
-    this.calendarEvents = this.calendarEvents.filter(evt => evt.id !== event.eventId);
+    this.calendarEvents = this.calendarEvents.filter(evt => evt['seriesId'] !== event.seriesId);
     const events = this.generateRepeatingEvents(event);
     this.calendarEvents = [...this.calendarEvents, ...events];
     this.calendarOptions.events = this.calendarEvents;
@@ -92,6 +95,26 @@ export class EventCalenderComponent {
   deleteEvent(eventId: string) {
     this.calendarEvents = this.calendarEvents.filter(event => event.id !== eventId);
     this.calendarOptions.events = this.calendarEvents;
+  }
+
+  deleteSeries(seriesId: string) {
+    this.calendarEvents = this.calendarEvents.filter(event => event['seriesId'] !== seriesId);
+    this.calendarOptions.events = this.calendarEvents;
+  }
+
+  confirmDelete(event: any) {
+    const confirmDialog = this.dialog.open(DeleteConfirmDialogComponent, {
+      width: '300px',
+      data: { seriesId: event.seriesId }
+    });
+
+    confirmDialog.afterClosed().subscribe(result => {
+      if (result && result.action === 'deleteSeries') {
+        this.deleteSeries(result.seriesId);
+      } else if (result && result.action === 'deleteOccurrence') {
+        this.deleteEvent(event.eventId);
+      }
+    });
   }
 
   generateRepeatingEvents(event: any): EventInput[] {
@@ -109,7 +132,10 @@ export class EventCalenderComponent {
         title: event.eventTitle,
         start: `${currentDate.format('YYYY-MM-DD')}T${event.startTime}`,
         end: event.endTime ? `${currentDate.format('YYYY-MM-DD')}T${event.endTime}` : undefined,
-        color: event.eventColor
+        color: event.eventColor,
+        extendedProps: {
+          seriesId: event.seriesId
+        }
       };
       events.push(newEvent);
       currentDate.add(increment.unit as moment.DurationInputArg2, increment.value);

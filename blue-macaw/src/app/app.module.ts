@@ -17,11 +17,15 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatIconModule } from '@angular/material/icon';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatDialogModule } from '@angular/material/dialog';
 import { EventDialogComponent } from './pages/events/event-dialog/event-dialog.component';
 import { MatSelectModule } from '@angular/material/select';
-import { DeleteConfirmDialogComponent } from './events/delete-confirm-dialog/delete-confirm-dialog.component';
+import { DeleteConfirmDialogComponent } from './pages/events/delete-confirm-dialog/delete-confirm-dialog.component';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatCardModule } from '@angular/material/card';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 @NgModule({
   declarations: [
@@ -30,7 +34,7 @@ import { DeleteConfirmDialogComponent } from './events/delete-confirm-dialog/del
     EventCalenderComponent,
     DashboardComponent,
     EventDialogComponent,
-    DeleteConfirmDialogComponent,
+    DeleteConfirmDialogComponent
   ],
   imports: [
     CommonModule,
@@ -42,7 +46,11 @@ import { DeleteConfirmDialogComponent } from './events/delete-confirm-dialog/del
     MatButtonModule,
     MatFormFieldModule,
     MatDatepickerModule,
+    MatCardModule,
+    MatCheckboxModule,
     MatNativeDateModule,
+    MatDividerModule,
+    MatIconModule,
     MatDialogModule,
     NgbModule,
     NgbModalModule,

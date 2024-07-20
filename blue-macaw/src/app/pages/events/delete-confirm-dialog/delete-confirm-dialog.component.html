@@ -1,0 +1,9 @@
+<h2 mat-dialog-title>Delete Event</h2>
+<mat-dialog-content>
+  <p>Do you want to delete just this occurrence or the entire series?</p>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-raised-button color="warn" (click)="onDeleteSeries()">Delete Series</button>
+  <button mat-raised-button color="warn" (click)="onDeleteOccurrence()">Delete Occurrence</button>
+  <button mat-raised-button mat-dialog-close (click)="onCancel()">Cancel</button>
+</mat-dialog-actions>

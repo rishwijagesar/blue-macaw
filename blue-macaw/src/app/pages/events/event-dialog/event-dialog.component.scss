@@ -1,4 +1,21 @@
-mat-form-field {
-    display: block;
-    margin-bottom: 20px;
+.full-width {
+  width: 100%;
+  margin-bottom: 16px;
+}
+
+.half-width {
+  width: 48%;
+  margin-right: 4%;
+  margin-bottom: 16px;
+}
+
+mat-divider {
+  margin: 16px 0;
+}
+
+@media (max-width: 600px) {
+  .half-width {
+    width: 100%;
+    margin-right: 0;
   }
+}

@@ -25,3 +25,12 @@
     border-radius: 3px;
   }
   
+  /* FullCalendar day cells */
+.fc-day-sat, .fc-day-sun {
+  background-color: #f0f0f071;
+}
+
+/* FullCalendar day headers */
+.fc-col-header-cell.fc-day-sat, .fc-col-header-cell.fc-day-sun {
+  background-color: #f0f0f0;
+}
