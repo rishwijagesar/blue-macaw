@@ -53,8 +53,8 @@ export class EventCalenderComponent {
     this.openDialog({
       eventId: arg.event.id,
       eventTitle: arg.event.title,
-      eventStart: arg.event.startStr,
-      eventEnd: arg.event.endStr,
+      eventStart: arg.event.start,
+      eventEnd: arg.event.end,
       eventColor: arg.event.backgroundColor,
       category: arg.event.extendedProps.category,
       isUpdate: true
