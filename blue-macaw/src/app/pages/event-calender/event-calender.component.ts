@@ -14,13 +14,9 @@ import { DeleteConfirmDialogComponent } from '../events/delete-confirm-dialog/de
   styleUrls: ['./event-calender.component.scss']
 })
 export class EventCalenderComponent {
-  eventTitle: string = '';
-  eventDate: string = '';
-  selectedEventId: string | null = null;
-
   calendarEvents: EventInput[] = [
-    { id: uuidv4(), title: 'Event 1', date: '2024-07-20' },
-    { id: uuidv4(), title: 'Event 2', date: '2024-07-22' }
+    { id: uuidv4(), title: 'Event 1', date: '2024-07-20', color: '#3788d8' },
+    { id: uuidv4(), title: 'Event 2', date: '2024-07-22', color: '#3788d8' }
   ];
 
   calendarOptions: CalendarOptions = {
@@ -30,58 +26,63 @@ export class EventCalenderComponent {
     editable: true,
     selectable: true,
     dateClick: this.handleDateClick.bind(this),
-    eventClick: this.handleEventClick.bind(this)
+    eventClick: this.handleEventClick.bind(this),
+    fixedWeekCount: false,
   };
 
+  constructor(public dialog: MatDialog) {}
+
   handleDateClick(arg: any) {
-    this.eventDate = arg.dateStr;
+    this.openDialog({ eventDate: arg.dateStr });
   }
 
   handleEventClick(arg: any) {
-    this.selectedEventId = arg.event.id;
-    this.eventTitle = arg.event.title;
-    this.eventDate = arg.event.startStr;
+    this.openDialog({
+      eventId: arg.event.id,
+      eventTitle: arg.event.title,
+      eventDate: arg.event.startStr,
+      eventColor: arg.event.backgroundColor,
+      isUpdate: true
+    });
   }
 
-  addEvent() {
-    if (this.eventTitle && this.eventDate) {
-      const newEvent: EventInput = { id: uuidv4(), title: this.eventTitle, date: this.eventDate };
-      this.calendarEvents = [...this.calendarEvents, newEvent];
-      this.calendarOptions.events = this.calendarEvents;
-      this.clearForm();
-    } else {
-      alert('Please enter both title and date');
-    }
-  }
+  openDialog(data: any): void {
+    const dialogRef = this.dialog.open(EventDialogComponent, {
+      width: '300px',
+      data: { ...data, isUpdate: data.isUpdate || false }
+    });
 
-  deleteEvent() {
-    if (this.selectedEventId) {
-      this.calendarEvents = this.calendarEvents.filter(event => event.id !== this.selectedEventId);
-      this.calendarOptions.events = this.calendarEvents;
-      this.clearForm();
-    } else {
-      alert('Please select an event to delete');
-    }
-  }
-
-  updateEvent() {
-    if (this.selectedEventId && this.eventTitle && this.eventDate) {
-      this.calendarEvents = this.calendarEvents.map(event => {
-        if (event.id === this.selectedEventId) {
-          return { ...event, title: this.eventTitle, date: this.eventDate };
+    dialogRef.afterClosed().subscribe(result => {
+      if (result && result.action === 'save') {
+        if (result.event.isUpdate) {
+          this.updateEvent(result.event);
+        } else {
+          this.addEvent(result.event);
         }
-        return event;
-      });
-      this.calendarOptions.events = this.calendarEvents;
-      this.clearForm();
-    } else {
-      alert('Please select an event and enter both title and date');
-    }
+      } else if (result && result.action === 'delete') {
+        this.deleteEvent(result.event.eventId);
+      }
+    });
   }
 
-  clearForm() {
-    this.eventTitle = '';
-    this.eventDate = '';
-    this.selectedEventId = null;
+  addEvent(event: any) {
+    const newEvent: EventInput = { id: uuidv4(), title: event.eventTitle, date: event.eventDate, color: event.eventColor };
+    this.calendarEvents = [...this.calendarEvents, newEvent];
+    this.calendarOptions.events = this.calendarEvents;
+  }
+
+  updateEvent(event: any) {
+    this.calendarEvents = this.calendarEvents.map(evt => {
+      if (evt.id === event.eventId) {
+        return { ...evt, title: event.eventTitle, date: event.eventDate, color: event.eventColor };
+      }
+      return evt;
+    });
+    this.calendarOptions.events = this.calendarEvents;
+  }
+
+  deleteEvent(eventId: string) {
+    this.calendarEvents = this.calendarEvents.filter(event => event.id !== eventId);
+    this.calendarOptions.events = this.calendarEvents;
   }
 }
