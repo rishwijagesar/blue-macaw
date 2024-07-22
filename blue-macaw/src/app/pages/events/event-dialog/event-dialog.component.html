@@ -11,6 +11,18 @@
     <mat-datepicker #picker></mat-datepicker>
   </mat-form-field>
   <mat-form-field appearance="fill">
+    <mat-label>Start Time</mat-label>
+    <input matInput [(ngModel)]="data.eventStart" [ngxTimepicker]="startTime" readonly>
+    <ngx-material-timepicker #startTime></ngx-material-timepicker>
+    <ngx-material-timepicker-toggle matSuffix [for]="startTime"></ngx-material-timepicker-toggle>
+  </mat-form-field>
+  <mat-form-field appearance="fill">
+    <mat-label>End Time</mat-label>
+    <input matInput [(ngModel)]="data.eventEnd" [ngxTimepicker]="endTime" readonly>
+    <ngx-material-timepicker #endTime></ngx-material-timepicker>
+    <ngx-material-timepicker-toggle matSuffix [for]="endTime"></ngx-material-timepicker-toggle>
+  </mat-form-field>
+  <mat-form-field appearance="fill">
     <mat-label>Category</mat-label>
     <mat-select [(ngModel)]="data.category" (selectionChange)="onCategoryChange($event.value)">
       <mat-option *ngFor="let category of categories" [value]="category">

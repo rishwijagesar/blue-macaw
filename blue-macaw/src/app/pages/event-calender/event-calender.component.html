@@ -1,1 +1,11 @@
 <full-calendar [options]="calendarOptions"></full-calendar>
+
+<div class="category-legend">
+  <div 
+    *ngFor="let category of categories" 
+    class="category-item" 
+    [style.background-color]="category.color" 
+    (click)="onCategorySelect(category.name)">
+    {{ category.name }}
+  </div>
+</div>

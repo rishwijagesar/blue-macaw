@@ -26,6 +26,8 @@ import { DeleteConfirmDialogComponent } from './pages/events/delete-confirm-dial
 import { MatDividerModule } from '@angular/material/divider';
 import { MatCardModule } from '@angular/material/card';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
+
 
 @NgModule({
   declarations: [
@@ -56,7 +58,8 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
     NgbModalModule,
     MatSelectModule,
     BrowserAnimationsModule,
-    FullCalendarModule
+    FullCalendarModule,
+    NgxMaterialTimepickerModule
   ],
   providers: [],
   bootstrap: [AppComponent]

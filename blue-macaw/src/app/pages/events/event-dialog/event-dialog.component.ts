@@ -32,5 +32,6 @@ export class EventDialogComponent {
 
   onCategoryChange(category: any): void {
     this.data.eventColor = category.color;
+    this.data.category = category.name;
   }
 }
