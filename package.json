@@ -1,15 +1,15 @@
 {
   "name": "blue-macaw",
   "version": "0.0.0",
-"scripts": {
-  "ng": "ng",
-  "start": "node server.js",
-  "build": "ng build --prod",
-  "postinstall": "ng build --prod",
-  "test": "ng test",
-  "lint": "ng lint",
-  "e2e": "ng e2e"
-},
+  "scripts": {
+    "ng": "ng",
+    "start": "node server.js",
+    "build": "ng build --configuration production",
+    "postinstall": "ng build --configuration production",
+    "test": "ng test",
+    "lint": "ng lint",
+    "e2e": "ng e2e"
+  },
   "private": true,
   "dependencies": {
     "@angular/animations": "^16.1.0",
@@ -43,7 +43,6 @@
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^16.1.0",
-    "@angular/cli": "~16.1.0",
     "@angular/compiler-cli": "^16.1.0",
     "@angular/localize": "^16.1.0",
     "@types/jasmine": "~4.3.0",
